@@ -2,7 +2,20 @@ import scala.io.StdIn
 
 trait PrimitiveCalculatorWork {
 
+  implicit class ComparisonUtil(tuple: (Int, Int)) {
+    def min(other: (Int, Int)): (Int, Int) =
+      if (tuple._2 <= other._2) tuple else other
+  }
+
   def optimalSequence(n: Int): Array[Int] = {
+    def ops1(n: Int, table: Array[(Int, Int)]) = (n - 1, table(n - 1)._2)
+
+    def ops2(n: Int, table: Array[(Int, Int)]) =
+      if (n % 2 == 0) (n / 2, table(n / 2)._2) else (n / 2, Int.MaxValue)
+
+    def ops3(n: Int, table: Array[(Int, Int)]) =
+      if (n % 3 == 0) (n / 3, table(n / 3)._2) else (n / 3, Int.MaxValue)
+
     if (n == 1) Array(1)
     else {
       val table: Array[(Int, Int)] = Array.ofDim[(Int, Int)](n + 1)
@@ -10,17 +23,9 @@ trait PrimitiveCalculatorWork {
       table(1) = (0, 0)
 
       for (num <- 2 to n) {
-        val (index1, op1) = (num - 1, table(num - 1)._2)
-        val (index2, op2) =
-          if (num % 2 == 0) (num / 2, table(num / 2)._2)
-          else (num / 2, Int.MaxValue)
-        val (index3, op3) =
-          if (num % 3 == 0) (num / 3, table(num / 3)._2)
-          else (num / 3, Int.MaxValue)
-        val (index, op) =
-          if (op1 < op2 && op1 < op3) (index1, op1)
-          else if (op2 <= op1 && op2 < op3) (index2, op2)
-          else (index3, op3)
+        val (index, op) = ops3(num, table)
+          .min(ops2(num, table))
+          .min(ops1(num, table))
         table(num) = (index, 1 + op)
       }
 
