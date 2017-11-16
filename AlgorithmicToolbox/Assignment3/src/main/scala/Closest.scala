@@ -2,7 +2,7 @@ import scala.io.StdIn
 
 trait ClosestWork {
 
-  implicit class SortByX(array: Array[(Long, Long)]) {
+  implicit class SortUtil(array: Array[(Long, Long)]) {
 
     def sortByX(): Array[(Long, Long)] = array.sortWith {
       case ((x1, _), (x2, _)) => x1 < x2
@@ -28,32 +28,30 @@ trait ClosestWork {
     minimum
   }
 
-  private def closestPairs(points: Array[(Long, Long)]): Double =
-    if (points.length <= 3) bruteForce(points)
+  private def closestPairs(X: Array[(Long, Long)], Y: Array[(Long, Long)]): Double =
+    if (X.length <= 3) bruteForce(X)
     else {
-      val mid = points.length / 2
-      val leftMin = closestPairs(points.slice(0, mid))
-      val rightMin = closestPairs(points.slice(mid, points.length))
-      if (leftMin == 0.0) leftMin
-      else if (rightMin == 0.0) rightMin
+      val mid = X.length / 2
+      val Xl = X.slice(0, mid)
+      val Xr = X.slice(mid, X.length)
+      val Yl = Y.intersect(Xl)
+      val Yr = Y.intersect(Xr)
+
+      val leftMin = closestPairs(Xl, Yl)
+      val rightMin = closestPairs(Xr, Yr)
+
+      val min = leftMin.min(rightMin)
+      if (min == 0.0) min
       else {
-        val min =
-          if (leftMin <= rightMin) leftMin else rightMin
-        val splitMin = closestPairsSplit(points, min)
+        val splitMin = closestPairsSplit(Y, X(X.length / 2)._1, min)
         if (splitMin <= leftMin && splitMin <= rightMin) splitMin
         else if (leftMin <= rightMin && leftMin < splitMin) leftMin
         else rightMin
       }
     }
 
-  private def closestPairsSplit(points: Array[(Long, Long)], min: Double): Double = {
-    val mid = points.length / 2
-    val (midX, _) = points(mid)
-    val strip = (for {
-      i <- points.indices
-      p = points(i)
-      if math.abs(p._1 - midX) < min
-    } yield p).toArray.sortByY()
+  private def closestPairsSplit(points: Array[(Long, Long)], midX: Long, min: Double): Double = {
+    val strip = points.filter(p => math.abs(p._1 - midX) < min)
 
     var currentMin = min
 
@@ -61,7 +59,7 @@ trait ClosestWork {
       var j = i + 1
       while (j < strip.length && math.abs(strip(j)._2 - strip(i)._2) < currentMin) {
         val dist = euclideanDistance(strip(i), strip(j))
-        if (dist < currentMin) currentMin = dist
+        currentMin = if (dist < currentMin) dist else currentMin
         j += 1
       }
     }
@@ -69,9 +67,7 @@ trait ClosestWork {
   }
 
   def minimumDistance(points: Array[(Long, Long)]): Double =
-    BigDecimal(closestPairs(points.sortByX()))
-      .setScale(4, BigDecimal.RoundingMode.HALF_UP)
-      .toDouble
+    BigDecimal(closestPairs(points.sortByX(), points.sortByY())).setScale(4, BigDecimal.RoundingMode.HALF_UP).toDouble
 
 }
 
