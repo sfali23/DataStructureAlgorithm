@@ -1,5 +1,3 @@
-import java.util.concurrent.TimeUnit
-
 import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
@@ -34,6 +32,18 @@ class DefaultPointsAndSegmentsTest extends PointsAndSegmentsTest {
   private val start = -100000000
   private val end = 100000000
   private val totalNumOfSegments = 50000
+
+  test("countSegments: Max") {
+    val (segments, points) = generateData(totalNumOfSegments, totalNumOfSegments, start, end)
+
+    println(
+      s"Running countSegments with number of segments = $totalNumOfSegments and number of points = $totalNumOfSegments"
+    )
+
+    val countsByBinarySearch = countSegmentsByBinarySearch(segments, points)
+    val countsByNaiveImplementation = countSegmentsByNaiveImplementation(segments, points)
+    assert(countsByBinarySearch === countsByNaiveImplementation)
+  }
 
   test("countSegments: random tests") {
     for (n <- 1 to 100) {

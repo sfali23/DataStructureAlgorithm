@@ -8,7 +8,7 @@ trait PointsAndSegmentsWork[T] {
   ): Long =
     // if this point is less than the lower bound value of first segment then
     // this point is not it the any of segments
-    if (low > high || high < 0 || point < segments(low)._1) 0
+    if (point < segments(low)._1) 0
     else {
       val mid = low + ((high - low) / 2)
       val (lowerBound, upperBound) = segments(mid)
