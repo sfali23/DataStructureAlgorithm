@@ -1,6 +1,7 @@
 import java.util.concurrent.TimeUnit
 
 import scala.collection.mutable
+import scala.io.Source
 import scala.util.Random
 
 /**
@@ -62,4 +63,10 @@ trait TestHelper {
 
     println(s"$description: $label")
   }
+
+  def readLines(resourcePath: String): List[String] =
+    Source
+      .fromInputStream(getClass.getResourceAsStream(resourcePath))
+      .getLines()
+      .toList
 }

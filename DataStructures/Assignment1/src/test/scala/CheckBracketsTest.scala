@@ -1,5 +1,5 @@
 import org.junit.runner.RunWith
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.scalatest.junit.JUnitRunner
 
 /**
@@ -81,38 +81,27 @@ trait CheckBracketsTest extends FunSuite with CheckBracketsWork {
 }
 
 @RunWith(classOf[JUnitRunner])
-class DefaultCheckBracketsTest extends CheckBracketsTest with TestHelper {
+class DefaultCheckBracketsTest
+    extends CheckBracketsTest
+    with TestHelper
+    with BeforeAndAfterAll {
 
-  private val maxSize = 100000
-  private val brackets = Array[Char]('-', '[', '{', '(', ']', '}', ')')
+  private var startTime: Long = 0L
 
-  private def fillArray(array: Array[Char],
-                        start: Int,
-                        end: Int): Array[Char] = {
-    for (index <- start until end / 2) {
-      val endIndex = end - 1 - index
-      val i = generateInt(1, 4)
-      array(index) = brackets(i)
-      array(endIndex) = brackets(i + 3)
+  override protected def beforeAll(): Unit = {
+    startTime = System.nanoTime()
+  }
+
+  override protected def afterAll(): Unit = {
+    printTimeElapsed(startTime, "time to run all tests")
+  }
+
+  test("CheckBrackets: read pre-defined tests") {
+    for (i <- 1 to 54) {
+      val fileNamePrefix = f"$i%02d"
+      val input = readLines(s"/check-brackets/$fileNamePrefix").head
+      val output = readLines(s"/check-brackets/$fileNamePrefix.a").head
+      assert(checkBracketWithAnswer(input) === output)
     }
-    array
-  }
-
-  test("CheckBrackets: string with max length") {
-    val str = fillArray(Array.ofDim[Char](maxSize), 0, maxSize).mkString
-    println(str)
-    assert(checkBracket(str) === 0)
-  }
-
-  test("CheckBrackets: string with max length with multiple sets") {
-    var array = Array.ofDim[Char](maxSize)
-    val size = maxSize / 4
-    array = fillArray(array, 0, size)
-    array = fillArray(array, 0, size)
-    array = fillArray(array, 0, size)
-    array = fillArray(array, 0, size)
-    val str = array.mkString
-    println(str)
-    assert(checkBracket(str) === 0)
   }
 }
