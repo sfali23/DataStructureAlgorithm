@@ -35,9 +35,13 @@ trait CheckBracketsWork {
     else if (fullyRead) stack.last.position
     else stack.head.position
   }
+
+  def checkBracketWithAnswer(str: String): String = {
+    val result = checkBracket(str)
+    if (result == 0) "Success" else result.toString
+  }
 }
 
 object CheckBrackets extends App with CheckBracketsWork {
-  val result = checkBracket(StdIn.readLine())
-  if (result == 0) println("Success") else println(result.toString)
+  println(checkBracketWithAnswer(StdIn.readLine()))
 }
