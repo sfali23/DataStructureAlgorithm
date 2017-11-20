@@ -1,7 +1,7 @@
 name := "DataStructuresAssignment1"
 organization := "com.alphasystem"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.11.6"
 
 lazy val `DataStructuresAssignment1` = project in file(".")
 

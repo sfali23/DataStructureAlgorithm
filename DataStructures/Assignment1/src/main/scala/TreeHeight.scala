@@ -51,9 +51,12 @@ class Node(val key: Int) {
 }
 
 object TreeHeight extends App with TreeHeightWork {
-  new Thread(null, () => {
-    val n = StdIn.readInt()
-    val input = StdIn.readLine()
-    println(computeHeight(readTree(n, input)))
-  }, "1", 1 << 26).start()
+  val runnable = new Runnable {
+    override def run(): Unit = {
+      val n = StdIn.readInt()
+      val input = StdIn.readLine()
+      println(computeHeight(readTree(n, input)))
+    }
+  }
+  new Thread(null, runnable, "1", (1 << 26).toLong).start()
 }
