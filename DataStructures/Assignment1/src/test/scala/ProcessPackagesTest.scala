@@ -37,8 +37,7 @@ class ProcessPackagesTest
       System.setIn(new BufferedInputStream(new FileInputStream(path.toFile)))
       val scanner = new Scanner(System.in)
       val buffer = initBuffer(scanner)
-      val requests = readRequests(scanner)
-      val responses = processRequests(buffer, requests).map(_.startTime)
+      val responses = processRequests(buffer, scanner).map(_.startTime)
       val output =
         readLines(s"/process-packages/$fileNamePrefix.a").map(_.toInt)
       assert(responses === output, s"'Failed test $fileNamePrefix'")

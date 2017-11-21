@@ -35,6 +35,7 @@ class TreeHeightTest
   test("TreeHeight: read pre-defined tests") {
     for (i <- 1 to 24) {
       val fileNamePrefix = f"$i%02d"
+      println(s"Running test: $fileNamePrefix")
       val lines = readLines(s"/tree-height/$fileNamePrefix")
       val n = lines.head.toInt
       val input = lines.last

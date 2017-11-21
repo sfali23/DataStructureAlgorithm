@@ -1,16 +1,16 @@
-import scala.collection.mutable
-import scala.io.StdIn
+import java.util
+import java.util.Scanner
 
 trait TreeHeightWork {
 
   def computeHeight(root: Node): Int = {
     var height = Int.MinValue
-    val queue = mutable.Queue[(Node, Int)]()
-    queue.enqueue((root, 1))
-    while (queue.nonEmpty) {
-      val (current, level) = queue.dequeue()
+    val queue = new util.LinkedList[(Node, Int)]()
+    queue.add((root, 1))
+    while (!queue.isEmpty) {
+      val (current, level) = queue.remove()
       if (current.hasChildren)
-        current.children.foreach(node => queue.enqueue((node, level + 1)))
+        current.children.foreach(node => queue.add((node, level + 1)))
       else height = height.max(level)
     }
     height
@@ -36,6 +36,7 @@ class Node(val key: Int) {
   private var _children: List[Node] = List()
 
   def parent: Node = _parent
+
   def parent_=(parent: Node): Unit = {
     _parent = parent
     parent.addChild(this)
@@ -51,12 +52,13 @@ class Node(val key: Int) {
 }
 
 object TreeHeight extends App with TreeHeightWork {
+  val scanner = new Scanner(System.in)
   val runnable = new Runnable {
     override def run(): Unit = {
-      val n = StdIn.readInt()
-      val input = StdIn.readLine()
+      val n = scanner.nextLine().toInt
+      val input = scanner.nextLine()
       println(computeHeight(readTree(n, input)))
     }
   }
-  new Thread(null, runnable, "1", (1 << 26).toLong).start()
+  new Thread(null, runnable, "1", 1 << 26).start()
 }
