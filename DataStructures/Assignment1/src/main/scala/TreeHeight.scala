@@ -1,5 +1,6 @@
 import java.util
-import java.util.Scanner
+
+import scala.io.StdIn
 
 trait TreeHeightWork {
 
@@ -52,11 +53,10 @@ class Node(val key: Int) {
 }
 
 object TreeHeight extends App with TreeHeightWork {
-  val scanner = new Scanner(System.in)
   val runnable = new Runnable {
     override def run(): Unit = {
-      val n = scanner.nextLine().toInt
-      val input = scanner.nextLine()
+      val n = StdIn.readInt()
+      val input = StdIn.readLine()
       println(computeHeight(readTree(n, input)))
     }
   }
