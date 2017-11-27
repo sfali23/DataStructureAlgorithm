@@ -38,7 +38,7 @@ case class Request(arrivalTime: Int, processTime: Int)
 case class Response(startTime: Int = -1)
 
 class Buffer(size: Int) {
-  private var buffer = new util.LinkedList[Int]()
+  private val buffer = new util.LinkedList[Int]()
 
   def process(request: Request): Response = {
     val currentTime = request.arrivalTime
