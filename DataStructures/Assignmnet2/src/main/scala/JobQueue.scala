@@ -1,5 +1,4 @@
-import java.io._
-import java.util.{PriorityQueue, Scanner}
+import java.util.Scanner
 
 import scala.io.StdIn
 
@@ -114,24 +113,7 @@ trait JobQueueWork {
     (priorityQueue, jobs)
   }
 
-  def readData2: (PriorityQueue[JobInfo], Array[Long]) = {
-    var line = StdIn.readLine()
-    var splits = line.split(" ")
-    val numOfWorkers = splits.head.toInt
-    val numOfJobs = splits.last.toInt
-
-    val priorityQueue = new PriorityQueue[JobInfo](numOfWorkers, (o1: JobInfo, o2: JobInfo) => o1.compare(o2))
-    (0 until numOfWorkers).foreach(i => priorityQueue.add(JobInfo(i)))
-
-    val jobs = Array.ofDim[Long](numOfJobs)
-    line = StdIn.readLine()
-    splits = line.split(" ")
-    for (i <- 0 until numOfJobs) jobs(i) = splits(i).toLong
-
-    (priorityQueue, jobs)
-  }
-
-  def assignJobs(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
+  def assignJobs2(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
     import scala.util.control.Breaks._
 
     val response = Array.ofDim[String](jobs.length)
@@ -160,21 +142,27 @@ trait JobQueueWork {
     response
   }
 
+  def assignJobs(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
+    val response = Array.ofDim[String](jobs.length)
+    for(i <- jobs.indices){
+      val top = priorityQueue.get
+      val workerId = top.workerId
+      val finishTime = top.finishTime
+      val nextFinishTime = jobs(i) + finishTime
+      priorityQueue.insert(JobInfo(workerId, nextFinishTime))
+      response(i) = s"$workerId $finishTime"
+    }
+    response
+  }
+
 }
 
 /**
   * @author sali
   */
 object JobQueue extends App with JobQueueWork {
-  val st = System.nanoTime()
-  System.setIn(
-    new FileInputStream(
-      "C:\\Users\\sali\\development\\DataStructureAlgorithm\\DataStructures\\Assignmnet2\\docs\\Programming-Assignment-2-starter-files\\job_queue\\tests\\08"
-    )
-  )
-  // val scanner = new Scanner(System.in)
-  val (priorityQueue, jobs) = readData
+  val scanner = new Scanner(System.in)
+  val (priorityQueue, jobs) = readData(scanner)
   val response = assignJobs(priorityQueue, jobs)
   response.foreach(println)
-  println(System.nanoTime() - st)
 }

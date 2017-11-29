@@ -1,4 +1,3 @@
-import java.io.{ByteArrayOutputStream, PrintStream}
 import java.util.Scanner
 
 import org.junit.runner.RunWith
@@ -49,17 +48,6 @@ class JobQueueTest extends FunSuite with BeforeAndAfterAll with JobQueueWork wit
     assert(heap.heap === Array(7, 11, 12, 13, 18, 29, 18, 42, 14))*/
   }
 
-  /*test("nnn"){
-    val scanner = new Scanner(getClass.getResourceAsStream("/job-queue/03"))
-    val (pq, jobs) = readData(scanner)
-    val bos = new ByteArrayOutputStream()
-    val stream = new PrintStream(bos)
-    System.setOut(stream)
-    assignJobs(pq, jobs)
-    println(bos.toString)
-    stream.close()
-  }*/
-
   test("JobQueue: predefined tests"){
     for (i <- 1 to 4) {
       val fileNamePrefix = f"$i%02d"
@@ -67,17 +55,9 @@ class JobQueueTest extends FunSuite with BeforeAndAfterAll with JobQueueWork wit
       val scanner = new Scanner(getClass.getResourceAsStream(s"/job-queue/$fileNamePrefix"))
       val (pq, jobs) = readData(scanner)
 
-      val bos = new ByteArrayOutputStream()
-      val stream = new PrintStream(bos)
-      System.setOut(stream)
-
-      assignJobs(pq, jobs)
-
-      val output = readLines(s"/job-queue/$fileNamePrefix.a").mkString(System.lineSeparator()) + System.lineSeparator()
-      val result = bos.toString
+      val result = assignJobs(pq, jobs).toList
+      val output = readLines(s"/job-queue/$fileNamePrefix.a")
       assert(output === result)
-
-      stream.close()
     }
   }
 }
