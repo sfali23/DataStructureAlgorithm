@@ -1,7 +1,5 @@
 import java.util.Scanner
 
-import scala.io.StdIn
-
 case class JobInfo(workerId: Int, finishTime: Long = 0) {
   def <(other: JobInfo): Boolean =
     if (this.finishTime == other.finishTime) this.workerId < other.workerId
@@ -94,52 +92,6 @@ trait JobQueueWork {
     for (i <- 0 until numOfJobs) jobs(i) = scanner.nextLong()
 
     (priorityQueue, jobs)
-  }
-
-  def readData: (JobQueueHeap, Array[Long]) = {
-    var line = StdIn.readLine()
-    var splits = line.split(" ")
-    val numOfWorkers = splits.head.toInt
-    val numOfJobs = splits.last.toInt
-
-    val priorityQueue = new JobQueueHeap(numOfWorkers)
-    (0 until numOfWorkers).foreach(i => priorityQueue.insert(JobInfo(i)))
-
-    val jobs = Array.ofDim[Long](numOfJobs)
-    line = StdIn.readLine()
-    splits = line.split(" ")
-    for (i <- 0 until numOfJobs) jobs(i) = splits(i).toLong
-
-    (priorityQueue, jobs)
-  }
-
-  def assignJobs2(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
-    import scala.util.control.Breaks._
-
-    val response = Array.ofDim[String](jobs.length)
-    var currentTime = 0L
-    var count = 0
-    breakable {
-      while (true) {
-        if (count >= jobs.length) {
-          break
-        }
-
-        var top = priorityQueue.peek
-        while (count < jobs.length && currentTime == top.finishTime) {
-          top = priorityQueue.get
-          val workerId = top.workerId
-          val jobDuration = jobs(count)
-          priorityQueue.insert(JobInfo(workerId, jobDuration + currentTime))
-          response(count) = s"$workerId $currentTime"
-          top = priorityQueue.peek
-          count += 1
-        }
-
-        currentTime += 1L
-      } // end of while
-    } // end of breakable
-    response
   }
 
   def assignJobs(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
