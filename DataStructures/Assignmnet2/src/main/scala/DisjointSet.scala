@@ -33,6 +33,26 @@ class DisjointSet(maxSize: Int) {
     }
   }
 
+  def findSetWithPathCompression(i: Int): Int = {
+    if (i != parent(i))
+      parent(i) = findSetWithPathCompression(parent(i))
+    parent(i)
+  }
+
+  def unionWithPathCompression(i: Int, j: Int): Unit = {
+    val i_id = findSetWithPathCompression(i)
+    val j_id = findSetWithPathCompression(j)
+    if (i_id != j_id) {
+      if (rank(i_id) > rank(j_id))
+        parent(j_id) = i_id
+      else {
+        parent(i_id) = j_id
+        if (rank(i_id) == rank(j_id))
+          rank(j_id) = rank(j_id) + 1
+      }
+    }
+  }
+
   def print(): Unit = {
     println(parent.tail.mkString("[", ", ", "]"))
     println(rank.tail.mkString("[", ", ", "]"))
@@ -41,7 +61,11 @@ class DisjointSet(maxSize: Int) {
 }
 
 object DisjointSet {
-  def apply(maxSize: Int): DisjointSet = new DisjointSet(maxSize)
+  def apply(maxSize: Int): DisjointSet = {
+    val ds = new DisjointSet(maxSize)
+    ds.makeSet(1 until maxSize)
+    ds
+  }
 }
 
 object DisjointSetMain extends App {
@@ -60,7 +84,7 @@ object DisjointSetMain extends App {
   ds.union(9, 6)
 
   ds.print()
-  
+
   println(ds.findSet(6))
   println(ds.findSet(3))
   println(ds.findSet(11))
@@ -72,23 +96,42 @@ object DisjointSetMain extends App {
   ds1.makeSet(1 to 6)
   ds1.print()
 
-  ds1.union(2, 4)
+  ds1.unionWithPathCompression(2, 4)
   println("union(2, 4)")
   ds1.print()
 
-  ds1.union(5, 2)
+  ds1.unionWithPathCompression(5, 2)
   println("union(5, 2)")
   ds1.print()
 
-  ds1.union(3, 1)
+  ds1.unionWithPathCompression(3, 1)
   println("union(3, 1)")
   ds1.print()
 
-  ds1.union(2, 3)
+  ds1.unionWithPathCompression(2, 3)
   println("union(2, 3)")
   ds1.print()
 
-  ds1.union(2, 6)
+  ds1.unionWithPathCompression(2, 6)
   println("union(2, 6)")
   ds1.print()
+
+  val n = 10
+  val ds2 = DisjointSet(n + 1)
+  ds2.makeSet(1 to n)
+  for (i <- 1 until n)
+    ds2.unionWithPathCompression(i, i + 1)
+  ds2.print()
+
+  question4()
+
+  private def question4(): Unit = {
+    val ds = DisjointSet(61)
+
+    for(i <- 1 to 30) ds.unionWithPathCompression(i, 2 * i)
+    for(i <- 1 to 20) ds.unionWithPathCompression(i, 3 * i)
+    for(i <- 1 to 12) ds.unionWithPathCompression(i, 5 * i)
+    for(i <- 1 to 60) ds.findSetWithPathCompression(i)
+    ds.print()
+  }
 }
