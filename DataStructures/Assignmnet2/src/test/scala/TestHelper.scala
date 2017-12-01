@@ -1,3 +1,4 @@
+import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 import scala.collection.mutable
@@ -10,6 +11,7 @@ import scala.util.Random
 trait TestHelper {
 
   private val rand = new Random()
+  val testDataFolderPath: String
 
   /**
     * generates Int between start (inclusive) and end (exclusive).
@@ -63,6 +65,17 @@ trait TestHelper {
 
     println(s"$description: $label")
   }
+
+  def getResourcePath(pathPrefix: String, suffix: Option[String] = None): String = {
+    val extension = if(suffix.nonEmpty) s".${suffix.get}" else ""
+    s"/$testDataFolderPath/$pathPrefix$extension"
+  }
+
+  def getResourceAsStream(pathPrefix: String, suffix: Option[String] = None): InputStream =
+    getClass.getResourceAsStream(getResourcePath(pathPrefix, suffix))
+
+  def readLines(pathPrefix: String, suffix: Option[String] = None): List[String] =
+    readLines(getResourcePath(pathPrefix, suffix))
 
   def readLines(resourcePath: String): List[String] =
     Source

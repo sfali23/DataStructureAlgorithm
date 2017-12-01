@@ -23,10 +23,10 @@ class BuildHeapTest extends FunSuite with BeforeAndAfterAll with BuildHeapWork w
     for (i <- 1 to 6) {
       val fileNamePrefix = f"$i%02d"
       println(s"Running test: $fileNamePrefix")
-      val lines = readLines(s"/make-heap/$fileNamePrefix")
+      val lines = readLines(fileNamePrefix, None)
       val n = lines.head.toInt
       val input = lines.last
-      val output = readLines(s"/make-heap/$fileNamePrefix.a")
+      val output = readLines(fileNamePrefix, Some("a"))
       val swaps = generateSwaps(readArray(n, input))
       assert(swaps.length === output.head.toInt)
       assert(swaps.toArray.sorted === toArray(output.tail))
@@ -41,4 +41,5 @@ class BuildHeapTest extends FunSuite with BeforeAndAfterAll with BuildHeapWork w
       j = splits.last.toInt
     } yield (i, j)).toArray.sorted
 
+  override val testDataFolderPath: String = "make-heap"
 }

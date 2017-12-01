@@ -52,12 +52,13 @@ class JobQueueTest extends FunSuite with BeforeAndAfterAll with JobQueueWork wit
     for (i <- 1 to 4) {
       val fileNamePrefix = f"$i%02d"
       println(s"Running test: $fileNamePrefix")
-      val scanner = new Scanner(getClass.getResourceAsStream(s"/job-queue/$fileNamePrefix"))
+      val scanner = new Scanner(getResourceAsStream(fileNamePrefix))
       val (pq, jobs) = readData(scanner)
 
       val result = assignJobs(pq, jobs).toList
-      val output = readLines(s"/job-queue/$fileNamePrefix.a")
+      val output = readLines(fileNamePrefix, Some("a"))
       assert(output === result)
     }
   }
+  override val testDataFolderPath: String = "job-queue"
 }
