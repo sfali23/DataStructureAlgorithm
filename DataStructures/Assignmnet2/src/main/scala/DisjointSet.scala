@@ -128,10 +128,10 @@ object DisjointSetMain extends App {
   private def question4(): Unit = {
     val ds = DisjointSet(61)
 
-    for(i <- 1 to 30) ds.unionWithPathCompression(i, 2 * i)
-    for(i <- 1 to 20) ds.unionWithPathCompression(i, 3 * i)
-    for(i <- 1 to 12) ds.unionWithPathCompression(i, 5 * i)
-    for(i <- 1 to 60) ds.findSetWithPathCompression(i)
+    for (i <- 1 to 30) ds.unionWithPathCompression(i, 2 * i)
+    for (i <- 1 to 20) ds.unionWithPathCompression(i, 3 * i)
+    for (i <- 1 to 12) ds.unionWithPathCompression(i, 5 * i)
+    for (i <- 1 to 60) ds.findSetWithPathCompression(i)
     ds.print()
   }
 }
