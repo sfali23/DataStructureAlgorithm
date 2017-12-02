@@ -67,7 +67,7 @@ trait TestHelper {
   }
 
   def getResourcePath(pathPrefix: String, suffix: Option[String] = None): String = {
-    val extension = if(suffix.nonEmpty) s".${suffix.get}" else ""
+    val extension = if (suffix.nonEmpty) s".${suffix.get}" else ""
     s"/$testDataFolderPath/$pathPrefix$extension"
   }
 

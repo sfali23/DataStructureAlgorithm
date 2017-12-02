@@ -2,7 +2,7 @@ import java.util.Scanner
 
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
+import org.scalatest.{ BeforeAndAfterAll, FunSuite }
 
 /**
   * @author sali
@@ -48,7 +48,7 @@ class JobQueueTest extends FunSuite with BeforeAndAfterAll with JobQueueWork wit
     assert(heap.heap === Array(7, 11, 12, 13, 18, 29, 18, 42, 14))*/
   }
 
-  test("JobQueue: predefined tests"){
+  test("JobQueue: predefined tests") {
     for (i <- 1 to 4) {
       val fileNamePrefix = f"$i%02d"
       println(s"Running test: $fileNamePrefix")
