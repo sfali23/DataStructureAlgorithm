@@ -96,7 +96,7 @@ trait JobQueueWork {
 
   def assignJobs(priorityQueue: JobQueueHeap, jobs: Array[Long]): Array[String] = {
     val response = Array.ofDim[String](jobs.length)
-    for(i <- jobs.indices){
+    for (i <- jobs.indices) {
       val top = priorityQueue.get
       val workerId = top.workerId
       val finishTime = top.finishTime
