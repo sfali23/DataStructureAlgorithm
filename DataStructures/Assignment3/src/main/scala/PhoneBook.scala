@@ -9,7 +9,7 @@ trait PhoneBookWork {
   private val tableSize = 10000000
   private val phoneBook = Array.ofDim[String](tableSize)
 
-  def processQueries(scanner: Scanner, writer: OutputWriter): Unit = {
+  def processQuery(scanner: Scanner, writer: OutputWriter): Unit = {
     val query = scanner.next()
     val number = scanner.nextInt()
     query match {
@@ -24,6 +24,12 @@ trait PhoneBookWork {
       case _ => // ignore, do nothing
     }
   }
+
+  def processQueries(scanner: Scanner, writer: OutputWriter): Unit = {
+    val n = scanner.nextInt()
+    for (_ <- 1 to n) processQuery(scanner, writer)
+    writer.flush()
+  }
 }
 
 class OutputWriter(stream: OutputStream = System.out) {
@@ -35,9 +41,5 @@ class OutputWriter(stream: OutputStream = System.out) {
 }
 
 object PhoneBook extends App with PhoneBookWork {
-  val scanner = new Scanner(System.in)
-  val n = scanner.nextInt()
-  val writer = new OutputWriter()
-  for (_ <- 1 to n) processQueries(scanner, writer)
-  writer.flush()
+  processQueries(new Scanner(System.in), new OutputWriter())
 }
