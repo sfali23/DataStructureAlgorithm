@@ -6,6 +6,9 @@ import java.util.Scanner
   */
 trait PhoneBookWork {
 
+  val addQuery: String = "add"
+  val delQuery: String = "del"
+  val findQuery: String = "find"
   private val tableSize = 10000000
   private val phoneBook = Array.ofDim[String](tableSize)
 
@@ -13,12 +16,12 @@ trait PhoneBookWork {
     val query = scanner.next()
     val number = scanner.nextInt()
     query match {
-      case "add" =>
+      case `addQuery` =>
         val name = scanner.next()
         phoneBook(number) = name
-      case "del" =>
+      case `delQuery` =>
         phoneBook(number) = null
-      case "find" =>
+      case `findQuery` =>
         val name = phoneBook(number)
         writer.println(if (name == null) "not found" else name)
       case _ => // ignore, do nothing
