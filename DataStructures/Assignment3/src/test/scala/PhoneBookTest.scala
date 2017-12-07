@@ -13,12 +13,12 @@ class PhoneBookTest extends FunSuite with PhoneBookWork with TestHelper {
   override val testDataFolderPath: String = "phone-book"
 
   test("pre-defined tests") {
-    val tests = Array(1, 2)
+    val tests = Array(1, 2, 3)
     for (i <- tests) {
       val fileNamePrefix = f"$i%02d"
       val scanner = new Scanner(getResourceAsStream(fileNamePrefix))
       val byteArrayOutputStream = new ByteArrayOutputStream()
-      val writer = new OutputWriter(byteArrayOutputStream)
+      val writer = new PhoneBookOutputWriter(byteArrayOutputStream)
       processQueries(scanner, writer)
 
       val output = readLines(fileNamePrefix, Some("a")).mkString(System.lineSeparator()) + System.lineSeparator()
