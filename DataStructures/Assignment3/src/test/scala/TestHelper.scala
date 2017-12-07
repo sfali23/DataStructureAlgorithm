@@ -29,6 +29,8 @@ trait TestHelper {
     */
   def generateInt(end: Int): Int = generateInt(1, end)
 
+  def generateString(len: Int): String = Random.alphanumeric.take(len).mkString
+
   def generatePoints(n: Int, start: Int, end: Int): Array[Int] = {
     val set = mutable.Set[Int]()
     while (set.size != n) set += generateInt(start, end)
