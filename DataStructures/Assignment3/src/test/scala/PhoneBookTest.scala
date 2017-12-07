@@ -13,8 +13,9 @@ class PhoneBookTest extends FunSuite with PhoneBookWork with TestHelper {
   override val testDataFolderPath: String = "phone-book"
 
   test("pre-defined tests") {
-    val tests = Array(1, 2, 3)
-    for (i <- tests) {
+    val first = 1
+    val last = 4
+    for (i <- first to last) {
       val fileNamePrefix = f"$i%02d"
       val scanner = new Scanner(getResourceAsStream(fileNamePrefix))
       val byteArrayOutputStream = new ByteArrayOutputStream()
