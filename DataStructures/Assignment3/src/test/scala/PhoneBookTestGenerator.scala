@@ -73,5 +73,7 @@ object PhoneBookTestGenerator extends App with TestHelper {
 
   private def getPhoneNumberToFind: Int = getPhoneNumber(probabilityHigh)
 
-  generatePhoneBookTestInput(100, 3)
+  private val numberOfQueries = args(0).toInt
+  private val testNumber = args(1).toInt
+  generatePhoneBookTestInput(numberOfQueries, testNumber)
 }
