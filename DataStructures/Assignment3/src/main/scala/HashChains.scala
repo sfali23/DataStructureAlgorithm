@@ -22,16 +22,6 @@ class HashChainsWork(bucketSize: Int) {
     (h % bucketSize).toInt
   }
 
-  private def hash2(s: String): Int = {
-    var h = 0D
-    for (i <- s.indices) {
-      val c = s.charAt(i)
-      h += (c * math.pow(multiplier, i))
-      h %= prime
-    }
-    (h % bucketSize).toInt
-  }
-
   private def processQuery(scanner: Scanner, writer: HashChainsOutputWriter): Unit = {
     val query = scanner.next()
     query match {
