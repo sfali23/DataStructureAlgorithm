@@ -47,9 +47,29 @@ trait TreeOrdersWork {
     tree
   }
 
-  def inOrderTraversal(root: Option[Node], outputWriter: TreeOrdersOutputWriter): Unit = {
+  def traversal(root: Option[Node], outputWriter: TreeOrdersOutputWriter): Unit = {
+    inOrderTraversal(root, outputWriter)
+    preOrderTraversal(root, outputWriter)
+    postOrderTraversal(root, outputWriter)
+  }
+
+  private def inOrderTraversal(root: Option[Node], outputWriter: TreeOrdersOutputWriter): Unit = {
     val list = new util.ArrayList[Long]()
     inOrderTraversal(root, list)
+    printList(list, outputWriter)
+    outputWriter.flush()
+  }
+
+  private def preOrderTraversal(root: Option[Node], outputWriter: TreeOrdersOutputWriter): Unit = {
+    val list = new util.ArrayList[Long]()
+    preOrderTraversal(root, list)
+    printList(list, outputWriter)
+    outputWriter.flush()
+  }
+
+  private def postOrderTraversal(root: Option[Node], outputWriter: TreeOrdersOutputWriter): Unit = {
+    val list = new util.ArrayList[Long]()
+    postOrderTraversal(root, list)
     printList(list, outputWriter)
     outputWriter.flush()
   }
@@ -62,6 +82,26 @@ trait TreeOrdersWork {
     inOrderTraversal(node.left, list)
     list.add(node.value)
     inOrderTraversal(node.right, list)
+  }
+
+  private def preOrderTraversal(root: Option[Node], list: util.List[Long]): Unit = {
+    if (root.isEmpty) {
+      return
+    }
+    val node = root.get
+    list.add(node.value)
+    preOrderTraversal(node.left, list)
+    preOrderTraversal(node.right, list)
+  }
+
+  private def postOrderTraversal(root: Option[Node], list: util.List[Long]): Unit = {
+    if (root.isEmpty) {
+      return
+    }
+    val node = root.get
+    postOrderTraversal(node.left, list)
+    postOrderTraversal(node.right, list)
+    list.add(node.value)
   }
 
   private def printList(list: util.List[Long], outputWriter: TreeOrdersOutputWriter): Unit =
@@ -82,7 +122,7 @@ trait TreeOrdersWork {
     val tree = readData(scanner)
     val runnable = new Runnable {
       override def run(): Unit =
-        inOrderTraversal(Some(tree.head), outputWriter)
+        traversal(Some(tree.head), outputWriter)
     }
 
     new Thread(null, runnable, "1", 1 << 26).start()
@@ -94,7 +134,7 @@ trait TreeOrdersWork {
     val tree = readData(scanner)
     val runnable = new Runnable {
       override def run(): Unit =
-        inOrderTraversal(Some(tree.head), outputWriter)
+        traversal(Some(tree.head), outputWriter)
     }
 
     new Thread(null, runnable, "1", 1 << 26).start()
@@ -139,5 +179,5 @@ class TreeOrdersOutputWriter(stream: OutputStream = System.out) {
 }
 
 object TreeOrders extends App with TreeOrdersWork {
-  runTest(1)
+  runTest(21)
 }
