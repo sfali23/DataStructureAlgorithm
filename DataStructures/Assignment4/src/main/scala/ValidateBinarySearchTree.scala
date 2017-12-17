@@ -1,0 +1,6 @@
+/**
+  * @author sali
+  */
+class ValidateBinarySearchTree {
+
+}
