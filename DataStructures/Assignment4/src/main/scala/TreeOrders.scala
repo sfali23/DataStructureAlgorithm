@@ -179,5 +179,5 @@ class TreeOrdersOutputWriter(stream: OutputStream = System.out) {
 }
 
 object TreeOrders extends App with TreeOrdersWork {
-  runTest(21)
+  run()
 }
