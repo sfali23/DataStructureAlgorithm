@@ -68,18 +68,16 @@ trait ValidateBinarySearchTreeHardWork {
   }
 
   def isBinarySearchTree(root: Option[Node]): Boolean =
-    isBinarySearchTree(root, equalAllowed = false, Long.MinValue, Long.MaxValue)
+    isBinarySearchTree(root, Long.MinValue, Long.MaxValue)
 
-  private def isBinarySearchTree(mayBeRoot: Option[Node], equalAllowed: Boolean, min: Long, max: Long): Boolean =
+  private def isBinarySearchTree(mayBeRoot: Option[Node], min: Long, max: Long): Boolean =
     if (mayBeRoot.isEmpty) true
     else {
       val root = mayBeRoot.get
       val value = root.value
 
-      val b = if (equalAllowed) value >= min && value <= max else value > min && value < max
-
-      b && isBinarySearchTree(root.left, equalAllowed = false, min = min, max = value) && //
-      isBinarySearchTree(root.right, equalAllowed = true, min = value, max = max)
+      value >= min && value < max && isBinarySearchTree(root.left, min = min, max = value) && //
+      isBinarySearchTree(root.right, min = value, max = max)
     }
 
   def runTest(testIndex: Int): Unit = {
