@@ -4,6 +4,7 @@
 .sonar
 # IDEA
 .idea/
+**/.gradle
 
 # sbt specific
 project/.sbtserver
