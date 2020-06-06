@@ -3,11 +3,18 @@ import java.util.Scanner;
 
 public class Acyclicity {
     private static int acyclic(ArrayList<Integer>[] adj) {
+        return isCyclic(adj) ? 1 : 0;
+    }
+
+    private static boolean isCyclic(ArrayList<Integer>[] adj) {
         boolean[] visited = new boolean[adj.length];
         boolean[] recStack = new boolean[adj.length];
-        boolean result = false;
-
-        return 0;
+        for (int i = 0; i < adj.length; i++) {
+            if (isCyclic(visited, recStack, adj, i)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isCyclic(boolean[] visited,
